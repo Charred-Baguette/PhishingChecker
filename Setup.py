@@ -12,4 +12,6 @@ def dataset():
 if __name__ == "__main__":
     df = dataset()
     df.head()
+    print("Dataset loaded successfully.")
+    print("Number of rows:", df.shape[0])
     
