@@ -15,6 +15,16 @@ X_columns = [
     'num_spelling_errors',
     'num_urgent_keywords'
 ]
+Y = 'label'
+
+from sklearn.model_selection import train_test_split
+
+# Get features and target
+X = df[X_columns]
+y = df[Y]
+
+# Create train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 class DBSCAN:
     def __init__(self, eps=0.5, min_samples=5):
@@ -52,7 +62,10 @@ class DBSCAN:
 
     def get_clusters(self):
         return set(self.labels_)
+
+# Initialize and train model
 dbscan = DBSCAN(eps=0.5, min_samples=5)
-dbscan.train(X_columns, train_labels)
-predictions = dbscan.fit(test_data)
+dbscan.train(X_train, y_train)
+predictions = dbscan.fit(X_test)
 performance = dbscan.evaluate()
+print("Model Performance:", performance)
