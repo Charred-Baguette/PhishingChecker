@@ -44,30 +44,19 @@ y_balanced = pd.concat([pd.Series([0] * len(df_majority_undersampled)),
 
 # Create train-test split with balanced data
 X_train, X_test, y_train, y_test = train_test_split(X_balanced, y_balanced, test_size=0.2, random_state=42)
-from sklearn.ensemble import RandomForestClassifier
 
-class PhishingRandomForestClassifier:
-    def __init__(self, X_train, X_test, y_train, y_test):
-        self.X_train = X_train
-        self.X_test = X_test
-        self.y_train = y_train
-        self.y_test = y_test
-        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+from sklearn.svm import SVC
 
-    def train(self):
-        self.model.fit(self.X_train, self.y_train)
+# Create and train SVM classifier
+svm_classifier = SVC(kernel='rbf', random_state=42)
+svm_classifier.fit(X_train, y_train)
 
-    def evaluate(self):
-        y_pred = self.model.predict(self.X_test)
-        print("\nClassification Report:")
-        print(classification_report(self.y_test, y_pred))
-        print(f"Accuracy: {accuracy_score(self.y_test, y_pred):.2f}")
+# Make predictions
+y_pred = svm_classifier.predict(X_test)
 
-    def predict(self, X):
-        return self.model.predict(X)
+# Print results
+print("\nSupport Vector Machine Results:")
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
 
-# Create and use the classifier with our prepared data
-if __name__ == "__main__":
-    classifier = PhishingRandomForestClassifier(X_train, X_test, y_train, y_test)
-    classifier.train()
-    classifier.evaluate()
